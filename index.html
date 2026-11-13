@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Pennywise — Monthly Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">₹</span><span>Pennywise<small>PERSONAL FINANCE</small></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <a class="nav-item active" href="#overview">▦ <span>Overview</span></a>
+    <a class="nav-item" href="#transactions">↕ <span>Transactions</span></a>
+    <a class="nav-item" href="#budgets">◎ <span>Budgets</span></a>
+    <div class="side-note"><div class="note-icon">✦</div><b>Small steps add up.</b><p>Keep an eye on your spending and make your money work smarter.</p></div>
+    <div class="sidebar-bottom">Your data stays in this browser.<br><span>Private · Offline-ready</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">YOUR MONEY, CLEARLY</div><h1>Monthly overview</h1><p class="muted">A simple view of where your money goes.</p></div>
+      <div class="top-actions"><label class="month-picker">◷ <input id="monthPicker" type="month"></label><button class="btn primary" id="addTop">＋ Add transaction</button></div>
+    </header>
+
+    <section class="stats-grid" id="overview">
+      <article class="stat-card"><div class="stat-head"><span>Total income</span><span class="stat-icon green">↗</span></div><div class="stat-value" id="incomeTotal">₹0</div><div class="stat-foot">Money received this month</div></article>
+      <article class="stat-card"><div class="stat-head"><span>Total expenses</span><span class="stat-icon red">↘</span></div><div class="stat-value" id="expenseTotal">₹0</div><div class="stat-foot">Money spent this month</div></article>
+      <article class="stat-card"><div class="stat-head"><span>Available balance</span><span class="stat-icon purple">◈</span></div><div class="stat-value" id="balanceTotal">₹0</div><div class="stat-foot">Income minus expenses</div></article>
+      <article class="stat-card"><div class="stat-head"><span>Savings rate</span><span class="stat-icon blue">％</span></div><div class="stat-value" id="savingsRate">0%</div><div class="stat-foot">Share of income left over</div></article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel spending-panel"><div class="panel-heading"><div><h2>Spending breakdown</h2><p class="muted">Where your expenses are going</p></div><span class="pill" id="spendCount">0 expenses</span></div>
+        <div class="chart-wrap"><div class="donut" id="donut"><div class="donut-center"><strong id="donutTotal">₹0</strong><span>SPENT</span></div></div><div class="legend" id="legend"><div class="empty">Add expenses to see your breakdown.</div></div></div>
+      </article>
+      <article class="panel budget-panel" id="budgets"><div class="panel-heading"><div><h2>Monthly budget</h2><p class="muted">Set a spending limit for this month</p></div><span class="pill">THIS MONTH</span></div>
+        <div class="budget-total"><div><span class="muted">Overall budget</span><strong id="budgetAmount">Not set</strong></div><button class="btn subtle" id="editBudget">Set budget</button></div>
+        <div class="progress-track"><div class="progress-fill" id="budgetProgress"></div></div>
+        <div class="budget-meta"><span id="budgetSpent">₹0 spent</span><span id="budgetRemaining">Set a budget to track</span></div>
+        <div class="budget-tip" id="budgetTip">A budget gives every rupee a purpose. Set one to get started.</div>
+      </article>
+    </section>
+
+    <section class="panel transactions-panel" id="transactions">
+      <div class="panel-heading transaction-heading"><div><h2>Recent transactions</h2><p class="muted">Your income and expenses for the selected month</p></div><button class="btn primary small" id="addInline">＋ Add new</button></div>
+      <div class="filters"><input id="searchInput" type="search" placeholder="⌕  Search transactions..."><select id="typeFilter"><option value="all">All types</option><option value="expense">Expenses</option><option value="income">Income</option></select><select id="categoryFilter"><option value="all">All categories</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>TYPE</th><th class="right">AMOUNT</th><th></th></tr></thead><tbody id="transactionRows"><tr><td colspan="6" class="empty">No transactions yet. Add your first one.</td></tr></tbody></table></div>
+      <div class="table-footer"><span id="resultCount">0 transactions</span><div class="export-actions"><button class="text-btn" id="exportCsv">↓ Export CSV</button><button class="text-btn" id="backupBtn">⇧ Backup data</button><label class="text-btn import-label">↑ Import backup<input type="file" id="importFile" accept="application/json"></label></div></div>
+    </section>
+    <footer>Made for mindful money habits <span>·</span> Amounts in Indian Rupees (₹)</footer>
+  </main>
+</div>
+
+<dialog id="transactionDialog">
+<form id="transactionForm" method="dialog">
+  <div class="modal-head"><div><div class="eyebrow">KEEP YOUR RECORDS UPDATED</div><h2 id="formTitle">Add transaction</h2></div><button type="button" class="close-btn" id="closeTransaction">×</button></div>
+  <input type="hidden" id="editId">
+  <div class="field"><label>Transaction type</label><div class="segmented"><label><input type="radio" name="type" value="expense" checked><span>↘ Expense</span></label><label><input type="radio" name="type" value="income"><span>↗ Income</span></label></div></div>
+  <div class="field"><label for="title">Title</label><input id="title" required maxlength="60" placeholder="e.g. Monthly salary, Groceries"></div>
+  <div class="field-row"><div class="field"><label for="amount">Amount (₹)</label><input id="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div><div class="field"><label for="date">Date</label><input id="date" type="date" required></div></div>
+  <div class="field"><label for="category">Category</label><select id="category" required></select></div>
+  <div class="field"><label for="notes">Notes <span class="optional">OPTIONAL</span></label><textarea id="notes" rows="2" maxlength="180" placeholder="Add a note..."></textarea></div>
+  <div class="modal-actions"><button type="button" class="btn subtle" id="cancelTransaction">Cancel</button><button class="btn primary" type="submit">Save transaction</button></div>
+</form>
+</dialog>
+
+<dialog id="budgetDialog"><form id="budgetForm" method="dialog"><div class="modal-head"><div><div class="eyebrow">PLAN YOUR MONTH</div><h2>Set monthly budget</h2></div><button type="button" class="close-btn" id="closeBudget">×</button></div><div class="field"><label for="budgetInput">Monthly spending limit (₹)</label><input id="budgetInput" type="number" min="0" step="0.01" required placeholder="e.g. 25000"></div><div class="modal-actions"><button type="button" class="btn subtle" id="cancelBudget">Cancel</button><button class="btn primary">Save budget</button></div></form></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body></html>
